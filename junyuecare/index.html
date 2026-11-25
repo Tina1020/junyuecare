@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="font-1">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<title>君悦安康记</title>
+<meta name="theme-color" content="#E8663C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="君悦安康记">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.json">
+<style>
+  :root{
+    --bg:#FBF5EC; --card:#FFFFFF;
+    --primary:#E8663C; --primary-d:#D2552E;
+    --text:#4A3728; --muted:#8C7A68; --line:#EAD9C4;
+    --green:#5C7A4E; --red:#C24A38; --accent:#F2B33D;
+    --soft:#FCEDE0;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{overflow-x:hidden}
+  html.font-1{font-size:18px}
+  html.font-2{font-size:21px}
+  html.font-3{font-size:25px}
+  body{
+    margin:0;padding:0 0 5rem;font-size:1rem;line-height:1.65;overflow-x:hidden;
+    touch-action:pan-y;overscroll-behavior-x:contain;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--text);
+  }
+
+  /* ===== 封面 ===== */
+  .cover{
+    position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(160deg,#FFF7EC 0%,#FCE3CF 55%,#F8D9BE 100%);
+    padding:2rem;
+  }
+  .cover-art{margin-bottom:1.1rem;filter:drop-shadow(0 10px 22px rgba(232,102,60,.28))}
+  .cover-title{font-size:2.5rem;font-weight:900;color:var(--red);letter-spacing:.14em;margin:0;white-space:nowrap}
+  .cover-slogan{font-size:1.15rem;color:#9A6A48;margin:.7rem 0 2.2rem;font-weight:600}
+  .enter-btn{
+    background:var(--primary);color:#fff;border:0;border-radius:999px;
+    font-size:1.35rem;font-weight:800;padding:1rem 3.2rem;min-height:66px;
+    box-shadow:0 10px 24px rgba(232,102,60,.35);cursor:pointer;
+  }
+  .enter-btn:active{transform:scale(.97)}
+  .cover-tip{margin-top:1.6rem;font-size:.85rem;color:#A98A6E}
+
+  /* ===== 顶部栏 ===== */
+  .app[hidden]{display:none}
+  .app-header{
+    position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:.55rem;
+    background:var(--primary);color:#fff;padding:.7rem .9rem;
+    box-shadow:0 2px 10px rgba(74,55,40,.12);
+    overflow:hidden; /* 大字号下防止标题+按钮超出屏宽，导致可横向滑动 */
+  }
+  .app-title-wrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
+  .greet{font-size:1rem;font-weight:700;line-height:1.3}
+  .app-title{font-size:clamp(16px,4.4vw,20px);font-weight:800;line-height:1.3;white-space:nowrap;overflow:visible}
+  .icon-btn{
+    background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:.7rem;
+    font-size:.95rem;font-weight:700;padding:.5rem .8rem;min-height:3.1rem;
+    cursor:pointer;white-space:nowrap;flex-shrink:0;
+  }
+  .icon-btn:active{transform:scale(.96)}
+
+  main{padding:1rem .85rem 4.8rem;max-width:46rem;margin:0 auto}
+
+  .page{display:none}
+  .page.active{display:block}
+
+  .sec-bar{margin-bottom:.5rem}
+  .back-link{
+    background:none;border:0;color:var(--primary);font-size:1.05rem;
+    font-weight:800;padding:.35rem 0;cursor:pointer;
+  }
+  .back-link:active{opacity:.6}
+  .back-home-btn{
+    display:inline-flex;align-items:center;gap:.3rem;
+    background:#fff;color:var(--primary);border:2px solid var(--primary);
+    border-radius:.8rem;font-size:1.05rem;font-weight:800;
+    padding:.55rem 1.1rem;min-height:3.2rem;cursor:pointer;
+  }
+  .back-home-btn:active{transform:scale(.97)}
+
+  /* ===== 首页大宫格 ===== */
+  .home-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:.4rem}
+  .tile{
+    display:flex;flex-direction:column;align-items:flex-start;gap:.55rem;
+    background:var(--card);border:2px solid var(--line);border-radius:1.25rem;
+    padding:1rem .9rem;min-height:122px;text-align:left;cursor:pointer;
+    box-shadow:0 5px 16px rgba(74,55,40,.06);
+  }
+  .tile:active{transform:scale(.98)}
+  .tile-ic{width:54px;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center}
+  .tile-name{font-size:1.2rem;font-weight:800;color:var(--text)}
+  .tile-sub{font-size:.85rem;color:var(--muted);line-height:1.35}
+  .home-hint{margin-top:1.1rem;text-align:left;color:var(--muted);font-size:.85rem}
+  .home-contact-link{margin-top:.8rem;background:none;border:0;padding:.3rem 0;color:var(--primary-d);font-size:.9rem;font-weight:700;text-decoration:underline;cursor:pointer;text-align:left}
+  .qr-card{text-align:center}
+  .qr-img{width:200px;max-width:80%;height:auto;display:block;margin:.8rem auto;border:2px solid var(--line);border-radius:.6rem;background:#fff}
+  .qr-tip{margin:.8rem 0 .4rem;font-size:.95rem;line-height:1.6;color:var(--text)}
+  .qr-privacy{margin:.5rem 0 0;font-size:.85rem;line-height:1.6;color:var(--muted)}
+
+  /* ===== 首页吃药清单 / 提醒 ===== */
+  .med-banner{
+    background:linear-gradient(135deg,#E8663C,#D2552E);color:#fff;
+    border-radius:1rem;padding:.85rem 1rem;margin-bottom:.9rem;
+    font-size:1rem;line-height:1.5;font-weight:600;cursor:pointer;
+    box-shadow:0 8px 20px rgba(232,102,60,.3);
+  }
+  .med-banner b{color:#FFF3E0}
+  .med-banner .banner-x{display:inline-block;margin-left:.5rem;opacity:.85;font-size:.85rem;text-decoration:underline}
+  .home-med-card{margin-top:.2rem}
+  .hm-med{padding:.6rem 0;border-bottom:1px dashed var(--line)}
+  .hm-med:last-child{border-bottom:0;padding-bottom:0}
+  .hm-med-name{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:.45rem}
+  .hm-slot{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.3rem 0}
+  .hm-slot-time{font-size:1rem;color:var(--muted);font-weight:600;white-space:nowrap;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .hm-toggle{
+    flex:0 0 auto;min-height:54px;padding:.5rem 1.1rem;border-radius:999px;
+    font-size:1rem;font-weight:800;cursor:pointer;
+    background:var(--soft);color:var(--primary-d);border:2px solid var(--primary);
+  }
+  .hm-toggle.done{background:var(--green);color:#fff;border-color:var(--green)}
+  .hm-toggle:active{transform:scale(.97)}
+  .hm-status{margin:.75rem 0 0;font-size:1rem;font-weight:800}
+  .hm-status.pending{color:var(--primary-d)}
+  .hm-status.all-done{color:var(--green)}
+
+  /* ===== 卡片表单 ===== */
+  .card{background:var(--card);border:2px solid var(--line);border-radius:1.1rem;padding:1rem;margin-bottom:.85rem;box-shadow:0 4px 14px rgba(74,55,40,.05)}
+  .sos-contact{border-color:var(--primary);box-shadow:0 6px 18px rgba(232,102,60,.16)}
+  .group{background:var(--soft);border:2px solid var(--line);border-radius:1.1rem;padding:.9rem 1rem;margin-bottom:.85rem}
+  .group-title{font-size:1.05rem;font-weight:800;color:var(--primary-d);margin:0 0 .6rem;padding-bottom:.4rem;border-bottom:2px solid var(--line)}
+  .tips-list{margin:.3rem 0 0;padding-left:1.2rem;list-style:none}
+  .tips-list li{position:relative;margin:.55rem 0;line-height:1.65;color:var(--text);font-size:.95rem}
+  .tips-list li::before{content:"•";position:absolute;left:-1rem;color:var(--red);font-weight:900}
+  label{display:block;font-size:1rem;font-weight:700;margin:.6rem 0 .3rem;color:var(--muted)}
+  label:first-of-type{margin-top:0}
+  input,textarea,select{
+    font-family:inherit;font-size:1.05rem;width:100%;min-height:3.4rem;padding:.7rem .8rem;
+    border:2px solid var(--line);border-radius:.8rem;background:#fff;color:var(--text);
+  }
+  textarea{resize:vertical;min-height:5rem}
+  /* 占位提示文字：比正文淡但不刺眼；明确是"示例"而非已填的值 */
+  input::placeholder,textarea::placeholder{color:#B7A894;opacity:1}
+  body.contrast input::placeholder,body.contrast textarea::placeholder{color:#A89450}
+  .row{display:flex;gap:.6rem;align-items:center;margin-top:.6rem}
+  .row > *{flex:1}
+  .row .btn{flex:0 0 auto}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;align-items:start;margin-top:.35rem}
+  .row2 > div{display:flex;flex-direction:column}
+  .row2 label{min-height:2.6em;display:flex;align-items:flex-end;line-height:1.2;margin:.55rem 0 .4rem;font-size:.92rem}
+
+  /* ===== 按钮 ===== */
+  .btn{
+    font-family:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;
+    min-width:5rem;min-height:3.4rem;padding:.6rem 1.1rem;margin:.25rem .3rem .25rem 0;
+    border:2px solid var(--primary);border-radius:.9rem;background:#fff;color:var(--primary);
+  }
+  .btn:active{transform:scale(.97)}
+  .btn.block{display:block;width:100%;margin:.4rem 0}
+  .btn.primary{background:var(--primary);color:#fff}
+  .btn.ok{background:var(--green);color:#fff;border-color:var(--green)}
+  .btn.warn{background:#fff;color:var(--red);border-color:var(--red)}
+  .btn.danger{background:var(--red);color:#fff;border-color:var(--red)}
+  .btn.ghost{background:#fff;color:var(--muted);border-color:var(--line)}
+  .btn.active{outline:4px solid var(--accent);outline-offset:2px}
+
+  /* ===== 药品卡 ===== */
+  .med-head{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem}
+  .med-name{font-size:1.2rem;font-weight:800;color:var(--text)}
+  .badge{font-size:.8rem;font-weight:700;padding:.18rem .55rem;border-radius:999px;background:#FDECEA;color:var(--red);border:1px solid var(--red)}
+  .med-meta{font-size:.95rem;color:var(--muted);margin:.3rem 0 .6rem}
+  .med-slots{margin:.3rem 0 .5rem}
+  .slot{background:var(--soft);border:2px solid var(--line);border-radius:.8rem;padding:.6rem .7rem;margin-bottom:.5rem}
+  .slot-time{display:block;font-size:1rem;font-weight:800;color:var(--primary-d);margin-bottom:.4rem}
+  .slot-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem}
+  .slot-btns .btn{margin:0;min-height:3.1rem;font-size:.95rem;padding:.4rem .2rem;min-width:0}
+  .med-actions{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.6rem}
+  .med-actions .btn{margin:0;min-height:3.2rem;font-size:1rem}
+
+  /* ===== 记录列表 ===== */
+  .kv{display:flex;justify-content:space-between;gap:.8rem;padding:.4rem 0;border-bottom:1px dashed var(--line);font-size:1rem}
+  .kv:last-child{border-bottom:0}
+  .kv b{color:var(--primary-d);flex:0 0 auto;margin-right:.5rem}
+  .kv span{text-align:right;word-break:break-all}
+  .kv a{color:var(--green);font-weight:800;text-decoration:none}
+  .dial{color:var(--green);font-weight:800;text-decoration:underline;text-underline-offset:3px}
+  .rec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+  .rec-date{font-weight:800;color:var(--primary-d);font-size:1.05rem}
+  .hint{font-size:.9rem;color:var(--muted);margin:.3rem 0 .8rem}
+  .hint.warn{background:#FFF6E6;border:2px solid #F0C877;border-radius:.8rem;padding:.6rem .8rem;color:#7A5310;font-weight:700;font-size:.92rem}
+  .empty{text-align:left;color:var(--muted);padding:1.2rem 0;font-size:.95rem}
+
+  /* ===== chips / 多选 ===== */
+  .chips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.4rem 0}
+  .chip{background:var(--primary);color:#fff;border:0;border-radius:999px;padding:.4rem .85rem;font-size:.95rem;cursor:pointer;font-weight:700}
+  .chip:active{transform:scale(.96)}
+  .presets{display:flex;flex-wrap:wrap;gap:.45rem;margin:.5rem 0 .2rem}
+  .checks{display:flex;flex-wrap:wrap;gap:.5rem;margin:.4rem 0}
+  .checks label{
+    display:flex;align-items:center;gap:.4rem;font-size:.98rem;font-weight:400;
+    color:var(--text);margin:0;padding:.55rem .8rem;border:2px solid var(--line);
+    border-radius:.7rem;cursor:pointer;background:#fff;
+  }
+  .checks input[type=checkbox]{width:auto;min-height:0;margin:0;accent-color:var(--primary);width:1.3rem;height:1.3rem}
+  .checks label.on{border-color:var(--primary);background:#FCEDE0;font-weight:700}
+
+  .trend{color:var(--primary-d);font-weight:700;font-size:.85rem;margin-left:.15rem;white-space:nowrap}
+
+  /* ===== 底部免责 ===== */
+  .disclaimer{
+    position:fixed;left:0;right:0;bottom:0;z-index:20;text-align:left;
+    background:#FFF6E6;border-top:2px solid #F0C877;color:#6B5200;
+    font-size:.82rem;line-height:1.65;padding:.65rem .9rem;
+  }
+
+  /* ===== toast ===== */
+  #toast{
+    position:fixed;left:50%;bottom:5.4rem;transform:translateX(-50%) translateY(1rem);
+    background:rgba(74,55,40,.96);color:#fff;padding:.8rem 1.2rem;border-radius:.9rem;
+    font-size:.98rem;opacity:0;transition:.25s;pointer-events:none;z-index:50;
+    max-width:84vw;text-align:center;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ===== 弹窗 ===== */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:60;padding:1rem}
+  .modal.show{display:flex}
+  .modal-box{background:#fff;border-radius:1.1rem;padding:1.3rem;max-width:24rem;width:100%;max-height:84vh;overflow:auto}
+  .modal-box p,#modalText{font-size:1.08rem;font-weight:700;line-height:1.65;margin:0 0 1.2rem;white-space:pre-wrap;word-break:break-word;overflow-wrap:break-word}
+  /* 会员弹窗专用排版：整齐清单 + 引导框，避免中文被拆得七零八落 */
+  .mem-title{font-size:1.15rem;font-weight:900;color:var(--primary-d);margin:0 0 .1rem;text-align:center}
+  .mem-price{display:block;text-align:center;font-size:.9rem;color:var(--muted);font-weight:700;margin-bottom:.85rem}
+  .mem-list{list-style:none;margin:0 0 .95rem;padding:0}
+  .mem-list li{position:relative;padding:.3rem 0 .3rem 1.65rem;font-size:1.05rem;font-weight:700;line-height:1.45}
+  .mem-list li::before{content:"✓";position:absolute;left:.15rem;top:.3rem;color:var(--green);font-weight:900}
+  .mem-guide{background:var(--soft);border:2px solid var(--line);border-radius:.85rem;padding:.8rem .95rem;margin-bottom:.7rem}
+  .mem-guide b{display:block;color:var(--primary-d);font-size:1.08rem;margin-bottom:.4rem}
+  .mem-guide p{font-size:1rem;font-weight:600;line-height:1.7;margin:0;white-space:normal;color:var(--text)}
+  .mem-guide p em{font-style:normal;color:var(--primary-d);font-weight:900;white-space:nowrap}
+  .mem-privacy{font-size:.88rem;font-weight:600;color:var(--muted);margin:0;line-height:1.55}
+  .modal-btns{display:flex;flex-wrap:wrap;gap:.6rem}
+  .modal-btns .btn{flex:1 1 6rem;margin:0;min-height:3.4rem;font-size:1.05rem;white-space:nowrap;padding:.6rem .7rem}
+
+  /* ===== 高对比度 ===== */
+  body.contrast{--bg:#000;--card:#111;--text:#FFEE88;--muted:#FFD54F;--line:#FFEE88;--soft:#1a1a1a}
+  body.contrast .app-header{background:#000;border-bottom:2px solid #FFEE88}
+  body.contrast .icon-btn{background:#222;color:#FFEE88;border:1px solid #FFEE88}
+  body.contrast .tile{background:#111;border-color:#FFEE88}
+  body.contrast .tile-name{color:#FFEE88}
+  body.contrast .tile-sub{color:#FFEE88}
+  body.contrast .btn{background:#222;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .btn.primary,body.contrast .btn.ok{background:#FFEE88;color:#000}
+  body.contrast .btn.danger{background:#FF6B5B;color:#000}
+  body.contrast .btn.active{outline-color:#fff}
+  body.contrast input,body.contrast textarea,body.contrast select{background:#000;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .med-name,body.contrast .kv b,body.contrast .rec-date,body.contrast .group-title,body.contrast .slot-time{color:#FFEE88}
+  body.contrast .chip{background:#FFEE88;color:#000}
+  body.contrast .slot{background:#1a1a1a;border-color:#FFEE88}
+  body.contrast .checks label{background:#111;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .checks label.on{background:#333}
+  body.contrast .group,body.contrast .card{background:#111}
+  body.contrast .trend{color:#FFEE88}
+  body.contrast .hint.warn{background:#222;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .home-hint,body.contrast .back-link,body.contrast .home-contact-link,body.contrast .qr-privacy{color:#FFEE88}
+  body.contrast .med-banner{background:#FFEE88;color:#000}
+  body.contrast .med-banner b{color:#000}
+  body.contrast .hm-med-name,body.contrast .hm-slot-time{color:#FFEE88}
+  body.contrast .hm-toggle{background:#222;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .hm-toggle.done{background:#333;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .home-med-card{border-color:#FFEE88}
+  body.contrast .back-home-btn{background:#222;color:#FFEE88;border-color:#FFEE88}
+  body.contrast .cover{background:#000}
+  body.contrast .cover-title,body.contrast .cover-slogan,body.contrast .cover-tip{color:#FFEE88}
+  body.contrast .enter-btn{background:#FFEE88;color:#000}
+</style>
+</head>
+<body>
+
+<!-- ================= 封面 ================= -->
+<div id="cover" class="cover">
+  <div class="cover-art">
+    <svg viewBox="0 0 120 120" width="128" height="128" aria-hidden="true">
+      <circle cx="60" cy="60" r="54" fill="#fff" opacity=".92"/>
+      <circle cx="60" cy="60" r="42" fill="#E8663C"/>
+      <rect x="51" y="36" width="18" height="48" rx="7" fill="#fff"/>
+      <rect x="36" y="51" width="48" height="18" rx="7" fill="#fff"/>
+    </svg>
+  </div>
+  <h1 class="cover-title">君悦安康记</h1>
+  <p class="cover-slogan">每天记一点，健康看得见</p>
+  <button id="enterBtn" class="enter-btn">进入 →</button>
+  <p class="cover-tip">数据只存在本机，记得常备份</p>
+</div>
+
+<!-- ================= 主程序 ================= -->
+<div id="app" class="app" hidden>
+  <header class="app-header">
+    <button id="appBack" class="icon-btn" hidden>‹ 返回首页</button>
+    <div class="app-title-wrap">
+      <div class="greet" id="greet"></div>
+      <div class="app-title" id="appTitle"></div>
+    </div>
+    <button id="quickFont" class="icon-btn">字大一点</button>
+  </header>
+
+  <main>
+
+  <!-- ================= 首页 ================= -->
+  <section class="page active" id="page-home">
+    <div class="med-banner" id="medBanner" hidden></div>
+    <div class="home-grid">
+      <button class="tile" data-page="page-med">
+        <span class="tile-ic" style="background:#E8663C">
+          <svg viewBox="0 0 44 44" width="40" height="40"><g transform="rotate(45 22 22)"><rect x="11" y="17" width="22" height="12" rx="6" fill="#fff"/><line x1="22" y1="17" x2="22" y2="29" stroke="#E8663C" stroke-width="3"/></g></svg>
+        </span>
+        <span class="tile-name">我的用药</span>
+        <span class="tile-sub" id="hm-med">记好每天的药</span>
+      </button>
+
+      <button class="tile" data-page="page-daily">
+        <span class="tile-ic" style="background:#5C7A4E">
+          <svg viewBox="0 0 44 44" width="40" height="40"><path d="M8 23h7l3-8 4 16 3-8h11" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        </span>
+        <span class="tile-name">日常指标</span>
+        <span class="tile-sub" id="hm-daily">血压血糖随时记</span>
+      </button>
+
+      <button class="tile" data-page="page-exam">
+        <span class="tile-ic" style="background:#D9923A">
+          <svg viewBox="0 0 44 44" width="40" height="40"><rect x="13" y="9" width="18" height="26" rx="3" fill="#fff"/><line x1="17" y1="16" x2="27" y2="16" stroke="#D9923A" stroke-width="2.5"/><line x1="17" y1="21" x2="27" y2="21" stroke="#D9923A" stroke-width="2.5"/><line x1="17" y1="26" x2="23" y2="26" stroke="#D9923A" stroke-width="2.5"/></svg>
+        </span>
+        <span class="tile-name">体检档案</span>
+        <span class="tile-sub" id="hm-exam">关键数值留个底</span>
+      </button>
+
+      <button class="tile" data-page="page-fall">
+        <span class="tile-ic" style="background:#C24A38">
+          <svg viewBox="0 0 44 44" width="40" height="40"><path d="M22 11 L35 33 H9 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><line x1="22" y1="19" x2="22" y2="26" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="30" r="1.6" fill="#fff"/></svg>
+        </span>
+        <span class="tile-name">跌倒记录</span>
+        <span class="tile-sub" id="hm-fall">跌倒情况别漏记</span>
+      </button>
+
+      <button class="tile" data-page="page-sos">
+        <span class="tile-ic" style="background:#C9602F">
+          <svg viewBox="0 0 44 44" width="40" height="40"><rect x="15" y="9" width="14" height="26" rx="4" fill="#fff"/><circle cx="22" cy="31" r="2" fill="#C9602F"/></svg>
+        </span>
+        <span class="tile-name">紧急信息</span>
+        <span class="tile-sub" id="hm-sos">先填好保个底</span>
+      </button>
+
+      <button class="tile" data-page="page-set">
+        <span class="tile-ic" style="background:#6E8B5E">
+          <svg viewBox="0 0 44 44" width="40" height="40"><circle cx="22" cy="22" r="7" fill="none" stroke="#fff" stroke-width="3"/><g stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="22" y1="9" x2="22" y2="13"/><line x1="22" y1="31" x2="22" y2="35"/><line x1="9" y1="22" x2="13" y2="22"/><line x1="31" y1="22" x2="35" y2="22"/><line x1="13" y1="13" x2="16" y2="16"/><line x1="28" y1="28" x2="31" y2="31"/><line x1="31" y1="13" x2="28" y2="16"/><line x1="13" y1="31" x2="16" y2="28"/></g></svg>
+        </span>
+        <span class="tile-name">设置</span>
+        <span class="tile-sub">字号 · 备份 · 会员</span>
+      </button>
+    </div>
+
+    <div class="card home-med-card">
+      <div class="group-title">💊 今日吃药清单</div>
+      <div id="homeMeds"></div>
+      <p class="hm-status" id="hmMedStatus"></p>
+    </div>
+
+    <p class="home-hint">提示：点微信右上角「…」→「收藏」，下次在微信里能直接打开本页。</p>
+    <button type="button" class="home-contact-link" id="homeContact">使用中遇到问题？点这里扫码咨询我们 →</button>
+  </section>
+
+  <!-- ================= 我的用药 ================= -->
+  <section class="page" id="page-med">
+        <button class="btn primary block" id="toggleAddMed">➕ 新增药品</button>
+
+    <form class="card" id="medForm" hidden>
+      <label>药品名称（可从下拉里选）</label>
+      <input list="drugList" id="medName" placeholder="例如：硝苯地平" autocomplete="off">
+      <datalist id="drugList">
+        <option value="硝苯地平"></option><option value="氨氯地平"></option>
+        <option value="二甲双胍"></option><option value="阿司匹林"></option>
+        <option value="阿托伐他汀"></option><option value="美托洛尔"></option>
+        <option value="缬沙坦"></option><option value="格列美脲"></option>
+        <option value="氯吡格雷"></option><option value="呋塞米"></option>
+        <option value="骨化三醇"></option><option value="碳酸钙D3"></option>
+        <option value="阿仑膦酸钠"></option>
+      </datalist>
+
+      <label>吃几片</label>
+      <input type="text" id="medDose" placeholder="例如：1 片" autocomplete="off">
+
+      <label>什么时候吃（可以加多个时间）</label>
+      <div class="chips" id="timeChips"></div>
+      <div class="presets">
+        <button type="button" class="chip" data-pt="08:00">早 08:00</button>
+        <button type="button" class="chip" data-pt="12:00">中 12:00</button>
+        <button type="button" class="chip" data-pt="18:00">晚 18:00</button>
+        <button type="button" class="chip" data-pt="21:00">睡前 21:00</button>
+      </div>
+      <div class="row">
+        <input type="time" id="medTime">
+        <button type="button" class="btn ghost" id="addTime">加时间</button>
+      </div>
+
+      <div class="checks" style="margin-top:.85rem">
+        <label><input type="checkbox" id="medAllergy"> 这是过敏药，请标记</label>
+      </div>
+
+      <div class="row" style="margin-top:.9rem">
+        <button type="submit" class="btn ok">保存药品</button>
+        <button type="button" class="btn ghost" id="cancelMed">取消</button>
+      </div>
+    </form>
+
+    <p class="hint">免费版最多记录 3 种药品。数据只存在这台手机，换手机或清缓存会丢失。</p>
+    <div id="medList"></div>
+  </section>
+
+  <!-- ================= 日常指标 ================= -->
+  <section class="page" id="page-daily">
+        <form class="card" id="dailyForm">
+      <label for="dPeriod">测量时间点</label>
+      <select id="dPeriod">
+        <option value="晨起服药前">晨起服药前</option>
+        <option value="早餐后2小时">早餐后 2 小时</option>
+        <option value="午餐前">午餐前</option>
+        <option value="晚餐前">晚餐前</option>
+        <option value="睡前">睡前</option>
+        <option value="其他">其他（自己填）</option>
+      </select>
+      <p class="hint" style="margin:.25rem 0 .5rem">同一时间点记录的数据，才能对比变化。</p>
+      <div id="dPeriodOtherWrap" style="display:none;margin-bottom:.5rem">
+        <input type="text" id="dPeriodOther" placeholder="例如：午睡后" autocomplete="off">
+      </div>
+
+      <label>血压（单位 mmHg）</label>
+      <div class="row2" style="margin-top:0">
+        <div><label>高压</label><input type="number" id="dSys" inputmode="numeric" placeholder="例如：120"></div>
+        <div><label>低压</label><input type="number" id="dDia" inputmode="numeric" placeholder="例如：80"></div>
+      </div>
+
+      <div class="row2">
+        <div><label>血糖 (mmol/L)</label><input type="number" id="dGlu" inputmode="decimal" step="0.1" placeholder="例如：6.2"></div>
+        <div><label>心率 (次/分)</label><input type="number" id="dHr" inputmode="numeric" placeholder="例如：72"></div>
+      </div>
+
+      <label>体重（公斤）</label>
+      <input type="number" id="dWeight" inputmode="decimal" step="0.1" placeholder="例如：60">
+
+      <label>记录时间</label>
+      <input type="datetime-local" id="dTime">
+
+      <button type="submit" class="btn primary block" style="margin-top:.9rem">保存这次记录</button>
+    </form>
+
+    <p class="hint">免费版保留最近 7 条。没有趋势图，请及时截图或抄写。</p>
+    <div id="dailyList"></div>
+  </section>
+
+  <!-- ================= 体检档案 ================= -->
+  <section class="page" id="page-exam">
+        <form id="examForm">
+      <div class="hint warn">💡 先把体检单拍照存到手机相册，再在这里挑几项关键数值记一句。不用全录。</div>
+
+      <div class="group">
+        <div class="group-title">📅 体检日期</div>
+        <input type="date" id="eDate">
+      </div>
+
+      <div class="group">
+        <div class="group-title">🫀 心血管与代谢</div>
+        <div class="row2">
+          <div><label>空腹血糖 mmol/L</label><input type="number" step="0.1" id="eGlu" placeholder="例如：6.1"></div>
+          <div><label>糖化血红蛋白 %</label><input type="number" step="0.1" id="eHba1c" placeholder="例如：6.5"></div>
+        </div>
+        <div class="row2">
+          <div><label>总胆固醇 mmol/L</label><input type="number" step="0.01" id="eTc" placeholder="例如：4.8"></div>
+          <div><label>甘油三酯 mmol/L</label><input type="number" step="0.01" id="eTg" placeholder="例如：1.5"></div>
+        </div>
+        <div class="row2">
+          <div><label>低密度脂蛋白 LDL-C</label><input type="number" step="0.01" id="eLdl" placeholder="例如：2.8"></div>
+          <div><label>高密度脂蛋白 HDL-C</label><input type="number" step="0.01" id="eHdl" placeholder="例如：1.2"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🦴 骨骼与肌肉功能</div>
+        <div class="row2">
+          <div><label>骨密度 T 值（可负数）</label><input type="number" step="0.1" id="eT" placeholder="例如：-2.1"></div>
+          <div><label>检测部位</label>
+            <select id="eTPart">
+              <option value="腰椎">腰椎</option>
+              <option value="髋部">髋部</option>
+              <option value="股骨颈">股骨颈</option>
+            </select>
+          </div>
+        </div>
+        <div class="row2">
+          <div><label>握力 kg</label><input type="number" step="0.1" id="eGrip" placeholder="例如：22"></div>
+          <div><label>步速 m/s</label><input type="number" step="0.1" id="eSpeed" placeholder="例如：0.9"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🫀 器官功能与影像</div>
+        <label>颈动脉超声（文字描述）</label>
+        <input type="text" id="eCarotid" placeholder="例如：双侧斑块，左侧较前增厚" autocomplete="off">
+        <div class="row2">
+          <div><label>肌酐 μmol/L</label><input type="number" step="0.1" id="eCre" placeholder="例如：80"></div>
+          <div><label>尿素氮 mmol/L</label><input type="number" step="0.1" id="eBun" placeholder="例如：5.2"></div>
+        </div>
+        <label>心电图 / 心脏超声</label>
+        <input type="text" id="eHeart" placeholder="例如：窦性心律，轻度左室肥厚" autocomplete="off">
+      </div>
+
+      <div class="group">
+        <div class="group-title">🧠 认知与感官</div>
+        <div class="row2">
+          <div><label>MMSE / MoCA 评分</label><input type="number" step="1" id="eMmse" placeholder="例如：26"></div>
+          <div><label>筛查类型</label>
+            <select id="eMmseType">
+              <option value="MMSE">MMSE</option>
+              <option value="MoCA">MoCA</option>
+            </select>
+          </div>
+        </div>
+        <label>视力 / 听力备注</label>
+        <input type="text" id="eSense" placeholder="例如：已配老花镜，听力下降未配助听器" autocomplete="off">
+      </div>
+
+      <div class="group">
+        <div class="group-title">📝 其他备注</div>
+        <textarea id="eNote" rows="3" placeholder="例如：医生建议少盐、三个月后复查"></textarea>
+      </div>
+
+      <button type="submit" class="btn primary block">保存这次体检记录</button>
+    </form>
+
+    <p class="hint">免费版仅支持文字和数值录入。照片上传、PDF 导出为会员功能。</p>
+    <div id="examList"></div>
+  </section>
+
+  <!-- ================= 跌倒记录 ================= -->
+  <section class="page" id="page-fall">
+        <form id="fallForm">
+      <div class="group">
+        <div class="group-title">⏰ 发生时间</div>
+        <div class="row2">
+          <div><label>日期</label><input type="date" id="fDate"></div>
+          <div><label>时段</label>
+            <select id="fPeriod">
+              <option value="晨起">晨起</option>
+              <option value="上午">上午</option>
+              <option value="下午">下午</option>
+              <option value="夜间">夜间</option>
+              <option value="记不清">记不清</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">📍 地点</div>
+        <select id="fPlace">
+          <option value="室内-卫生间">室内 · 卫生间</option>
+          <option value="室内-卧室">室内 · 卧室</option>
+          <option value="室内-客厅">室内 · 客厅</option>
+          <option value="室内-厨房">室内 · 厨房</option>
+          <option value="室内-其他">室内 · 其他</option>
+          <option value="室外">室外</option>
+          <option value="记不清">记不清</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🚶 当时在做什么</div>
+        <select id="fAction">
+          <option value="起身">起身</option>
+          <option value="行走">行走</option>
+          <option value="如厕">如厕</option>
+          <option value="上下楼梯">上下楼梯</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <div class="group-title">❓ 可能原因（可多选）</div>
+        <div class="checks" id="fReasons">
+          <label><input type="checkbox" value="滑倒绊倒"> 滑倒绊倒</label>
+          <label><input type="checkbox" value="头晕眼花"> 头晕眼花</label>
+          <label><input type="checkbox" value="腿软无力"> 腿软无力</label>
+          <label><input type="checkbox" value="失去意识"> 失去意识</label>
+          <label><input type="checkbox" value="记不清"> 记不清</label>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🩹 后果（可多选）</div>
+        <div class="checks" id="fResults">
+          <label><input type="checkbox" value="无伤"> 无伤</label>
+          <label><input type="checkbox" value="软组织伤"> 软组织伤</label>
+          <label><input type="checkbox" value="疑似骨折"> 疑似骨折</label>
+          <label><input type="checkbox" value="已就医"> 已就医</label>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">💊 其他情况</div>
+        <label>是否正在服用可能影响平衡的药物</label>
+        <select id="fDrug">
+          <option value="否">否</option>
+          <option value="是">是</option>
+          <option value="不确定">不确定</option>
+        </select>
+        <label>当时是否独处</label>
+        <select id="fAlone">
+          <option value="否">否</option>
+          <option value="是">是</option>
+        </select>
+        <label>能否自己站起来</label>
+        <select id="fStand">
+          <option value="能">能</option>
+          <option value="不能">不能</option>
+        </select>
+        <label>是否使用拐杖 / 助行器</label>
+        <select id="fWalker">
+          <option value="否">否</option>
+          <option value="是">是</option>
+        </select>
+        <label>家中是否已装扶手 / 防滑垫</label>
+        <select id="fEnv">
+          <option value="不清楚">不清楚</option>
+          <option value="已装">已装</option>
+          <option value="未装">未装</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <div class="group-title">📝 备注</div>
+        <textarea id="fNote" rows="3" placeholder="例如：卫生间地滑，已加防滑垫"></textarea>
+      </div>
+
+      <button type="submit" class="btn primary block">保存这次跌倒记录</button>
+    </form>
+
+    <p class="hint">记录的目的不是数次数，而是看清每一次跌倒背后的可调整因素（药物、环境、血压、肌力）。</p>
+    <div id="fallList"></div>
+  </section>
+
+  <!-- ================= 紧急信息 ================= -->
+  <section class="page" id="page-sos">
+        <form class="card" id="sosForm" hidden>
+      <label>紧急联系人（姓名）</label>
+      <input type="text" id="sName" autocomplete="off">
+      <label>紧急联系人电话</label>
+      <input type="tel" id="sPhone" inputmode="tel" maxlength="20">
+      <label class="intl-chk" style="display:flex;align-items:center;gap:.4rem;font-size:.92rem;color:var(--muted);font-weight:600;margin-top:.35rem;cursor:pointer"><input type="checkbox" id="sPhoneIntl" style="width:1.2rem;height:1.2rem"> 这是海外/国际号码（含国家代码，如 +1、+44）</label>
+      <p class="hint" style="margin:.2rem 0 0">国内：手机号 11 位，座机可带区号或本地 7–8 位。海外：请勾选上方并带 + 和国家代码</p>
+      <label>主治医生 / 医院</label>
+      <input type="text" id="sDoctor" autocomplete="off">
+      <label>医生电话</label>
+      <input type="tel" id="sDocPhone" inputmode="tel" maxlength="20">
+      <label class="intl-chk" style="display:flex;align-items:center;gap:.4rem;font-size:.92rem;color:var(--muted);font-weight:600;margin-top:.35rem;cursor:pointer"><input type="checkbox" id="sDocPhoneIntl" style="width:1.2rem;height:1.2rem"> 这是海外/国际号码（含国家代码，如 +1、+44）</label>
+      <p class="hint" style="margin:.2rem 0 0">国内：手机号 11 位，座机可带区号或本地 7–8 位。海外：请勾选上方并带 + 和国家代码</p>
+      <label>过敏史</label>
+      <textarea id="sAllergy" rows="2" placeholder="例如：青霉素过敏"></textarea>
+      <label>基础病</label>
+      <textarea id="sChronic" rows="2" placeholder="例如：高血压、2 型糖尿病、骨质疏松"></textarea>
+      <label>既往骨折史</label>
+      <textarea id="sFracture" rows="2" placeholder="例如：2022 年腰椎脆性骨折，无外力"></textarea>
+      <label>是否在服用抗骨质疏松药</label>
+      <select id="sOsteo">
+        <option value="不清楚">不清楚</option>
+        <option value="是">是</option>
+        <option value="否">否</option>
+      </select>
+      <div class="row" style="margin-top:.9rem">
+        <button type="submit" class="btn ok">保存</button>
+        <button type="button" class="btn ghost" onclick="hideSosEdit()">取消</button>
+      </div>
+    </form>
+    <div id="sosView"></div>
+  </section>
+
+  <!-- ================= 设置 ================= -->
+  <section class="page" id="page-set">
+        <div class="card">
+      <label>字体大小</label>
+      <div class="row" style="margin-top:0">
+        <button class="btn ghost" data-font="1">标准</button>
+        <button class="btn ghost" data-font="2">放大</button>
+        <button class="btn ghost" data-font="3">超大</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>高对比度模式</label>
+      <button class="btn ghost block" id="toggleContrast">开启高对比度</button>
+    </div>
+
+    <div class="card">
+      <div class="group-title">💡 温馨提示（转发与隐私）</div>
+      <ul class="tips-list">
+        <li>本工具链接可放心转发给亲友，对方打开是空白记录，可自己登记使用。</li>
+        <li>您填的吃药、体检信息只存在您自己的手机里，只属于您自己。</li>
+        <li>请勿在共用设备上让他人查看本页，也不要转发“导出备份”的文件或页面截图，以免泄露您的健康信息。</li>
+        <li>本工具仅作记录提醒，不能替代医生诊疗，请遵医嘱用药。</li>
+      </ul>
+    </div>
+
+    <div class="card qr-card" id="contactCard">
+      <div class="group-title">📱 使用帮助 · 联系我们</div>
+      <img src="data:image/jpeg;base64,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" alt="君悦助老团公众号二维码" class="qr-img" id="qrImg">
+      <p class="qr-tip">用微信「扫一扫」或长按二维码识别，关注「君悦助老团」公众号，可咨询使用方法。</p>
+      <p class="qr-privacy">咨询时请勿发送您的健康数据截图。您的数据只存在这台手机，我们看不到。</p>
+    </div>
+
+    <div class="card">
+      <button class="btn primary block" id="btnExport">导出备份到手机</button>
+      <button class="btn ghost block" id="btnImport">从备份文件导入</button>
+      <input type="file" id="importFile" accept=".json,application/json" style="display:none">
+      <!-- 会员入口暂时隐藏（2026-11-24）：先看免费版真实需求，再上会员版。恢复时删掉 style="display:none" 即可，弹窗代码已保留。 -->
+      <button class="btn primary block" id="btnMember" style="display:none">会员激活 / 了解会员</button>
+      <button class="btn ghost block" id="btnPrivacy">隐私说明</button>
+      <button class="btn ghost block" id="btnTerms">免责声明</button>
+    </div>
+
+    <div class="card">
+      <label>危险操作</label>
+      <button class="btn danger block" id="btnClear">清除全部数据</button>
+    </div>
+
+    <p class="hint">君悦安康记 · 健康记录小工具 v4</p>
+  </section>
+
+  </main>
+</div>
+
+<footer class="disclaimer">
+  本工具仅记录，不能替代医嘱，调整用药请咨询医生。<br>
+  数据只存在本机，清缓存或换手机会丢失。
+</footer>
+
+<div id="toast"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div id="modalText"></div>
+    <div class="modal-btns" id="modalBtns"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var KEY_V3 = 'jy_health_v3';
+  var KEY_V2 = 'jy_health_v2';
+  var DAILY_LIMIT = 7;
+  var MED_LIMIT = 3;
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ---------- 状态 ---------- */
+  function defaultState(){
+    return {
+      version: 3,
+      meds: [],
+      medLogs: {},   // { date: { medId: { "07:00": "taken" } } }
+      daily: [],
+      exams: [],
+      falls: [],
+      sos: {},
+      settings: { font: 1, contrast: false, lastPage: 'page-home' }
+    };
+  }
+
+  function migrateV2ToV3(data){
+    if(!data || !data.medLogs) return data;
+    var out = {};
+    Object.keys(data.medLogs).forEach(function(date){
+      var day = data.medLogs[date];
+      if(!day || typeof day !== 'object') return;
+      out[date] = {};
+      Object.keys(day).forEach(function(medId){
+        var v = day[medId];
+        if(typeof v === 'string'){
+          out[date][medId] = { '_legacy': v };
+        } else if(v && typeof v === 'object'){
+          out[date][medId] = v;
+        }
+      });
+    });
+    data.medLogs = out;
+    return data;
+  }
+
+  function normalize(data){
+    var s = defaultState();
+    if(!data || typeof data !== 'object') return s;
+    s.meds = Array.isArray(data.meds) ? data.meds : [];
+    s.medLogs = (data.medLogs && typeof data.medLogs === 'object') ? data.medLogs : {};
+    s.daily = Array.isArray(data.daily) ? data.daily : [];
+    s.exams = Array.isArray(data.exams) ? data.exams : [];
+    s.falls = Array.isArray(data.falls) ? data.falls : [];
+    s.sos = (data.sos && typeof data.sos === 'object') ? data.sos : {};
+    s.settings = Object.assign({ font: 1, contrast: false, lastPage: 'page-home' }, data.settings || {});
+    return s;
+  }
+
+  function load(){
+    try{
+      var raw3 = localStorage.getItem(KEY_V3);
+      if(raw3){
+        return normalize(JSON.parse(raw3));
+      }
+      var raw2 = localStorage.getItem(KEY_V2);
+      if(raw2){
+        var d2 = migrateV2ToV3(JSON.parse(raw2));
+        var s2 = normalize(d2);
+        try{ localStorage.setItem(KEY_V3, JSON.stringify(s2)); }catch(e){}
+        return s2;
+      }
+    }catch(e){}
+    return defaultState();
+  }
+
+  var state = load();
+
+  function save(){
+    try{
+      localStorage.setItem(KEY_V3, JSON.stringify(state));
+    }catch(e){
+      toast('保存失败：手机存储空间已满');
+    }
+  }
+
+  /* ---------- 工具 ---------- */
+  function pad(n){ return String(n).padStart(2, '0'); }
+
+  function nowStr(){
+    var d = new Date();
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+
+           pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+
+  function todayStr(){
+    var d = new Date();
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  }
+
+  function esc(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function toast(msg){
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.classList.remove('show'); }, 2800);
+  }
+
+  /* ---------- 通用弹窗 ---------- */
+  function customDialog(text, buttons, useHtml){
+    return new Promise(function(resolve){
+      var m = $('modal');
+      var box = $('modalBtns');
+      var mt = $('modalText');
+      if(useHtml) mt.innerHTML = text; else mt.textContent = text;
+      box.innerHTML = '';
+      buttons.forEach(function(b){
+        var btn = document.createElement('button');
+        btn.className = 'btn ' + (b.cls || 'ghost');
+        btn.textContent = b.text;
+        btn.onclick = function(){
+          m.classList.remove('show');
+          resolve(b.value);
+        };
+        box.appendChild(btn);
+      });
+      m.classList.add('show');
+    });
+  }
+
+  function ask(text, okText, cancelText){
+    return customDialog(text, [
+      { text: cancelText || '取消', cls: 'ghost', value: false },
+      { text: okText || '确认', cls: 'danger', value: true }
+    ]).then(function(v){ return v === true; });
+  }
+
+  function info(text){
+    return customDialog(text, [
+      { text: '知道了', cls: 'primary', value: true }
+    ]);
+  }
+
+  /* ---------- 复制 ---------- */
+  function copyText(t, tip){
+    var message = tip || ('已复制 ' + t + '，请打开手机闹钟粘贴');
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(
+        function(){ toast(message); },
+        function(){ fallbackCopy(t, message); }
+      );
+    }else{
+      fallbackCopy(t, message);
+    }
+  }
+
+  function fallbackCopy(t, message){
+    var ta = document.createElement('textarea');
+    ta.value = t;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+      document.execCommand('copy');
+      toast(message);
+    }catch(e){
+      toast('复制失败，请手动记下：' + t);
+    }
+    ta.remove();
+  }
+
+  /* ---------- 设置 ---------- */
+  function applySettings(){
+    document.documentElement.className = 'font-' + (state.settings.font || 1);
+    document.body.classList.toggle('contrast', !!state.settings.contrast);
+    document.querySelectorAll('[data-font]').forEach(function(b){
+      b.classList.toggle('active', Number(b.dataset.font) === state.settings.font);
+    });
+    var t = $('toggleContrast');
+    t.textContent = state.settings.contrast ? '关闭高对比度' : '开启高对比度';
+    t.classList.toggle('active', !!state.settings.contrast);
+  }
+
+  document.querySelectorAll('[data-font]').forEach(function(b){
+    b.onclick = function(){
+      state.settings.font = Number(b.dataset.font);
+      save(); applySettings();
+    };
+  });
+
+  $('toggleContrast').onclick = function(){
+    state.settings.contrast = !state.settings.contrast;
+    save(); applySettings();
+  };
+
+  /* ---------- 导航 / 封面 / 首页 ---------- */
+  var PAGE_TITLES = {
+    'page-med':'我的用药', 'page-daily':'日常指标', 'page-exam':'体检档案',
+    'page-fall':'跌倒记录', 'page-sos':'紧急信息', 'page-set':'设置'
+  };
+
+  function greetText(){
+    var h = new Date().getHours();
+    var g = h < 11 ? '上午好' : h < 13 ? '中午好' : h < 18 ? '下午好' : '晚上好';
+    return g + '，今天身体还好吗？';
+  }
+
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(function(x){ x.classList.remove('active'); });
+    $(id).classList.add('active');
+    var isHome = (id === 'page-home');
+    $('appBack').style.display = isHome ? 'none' : 'inline-flex';
+    $('appTitle').textContent = isHome ? '' : (PAGE_TITLES[id] || '');
+    $('greet').style.display = isHome ? '' : 'none';
+    if(id !== 'page-home'){ state.settings.lastPage = id; save(); }
+    window.scrollTo(0, 0);
+    if(isHome) renderHomeMeds();
+  }
+
+  document.querySelectorAll('[data-page]').forEach(function(b){
+    b.addEventListener('click', function(){ showPage(b.dataset.page); });
+  });
+  $('appBack').onclick = function(){ showPage('page-home'); };
+  $('homeContact').addEventListener('click', function(){
+    showPage('page-set');
+    setTimeout(function(){
+      var c = $('contactCard');
+      if(c) c.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 120);
+  });
+
+  // 二维码：优先加载真实图片文件（微信可长按识别），取不到时用内嵌 base64 兜底
+  (function(){
+    var im = $('qrImg');
+    if(!im) return;
+    var qrSrc = 'qrcode.jpg';
+    var probe = new Image();
+    probe.onload = function(){ im.src = qrSrc; };
+    probe.src = qrSrc;
+  })();  $('quickFont').onclick = function(){
+    var n = (state.settings.font % 3) + 1;
+    state.settings.font = n; save(); applySettings();
+  };
+
+  $('enterBtn').onclick = function(){
+    $('cover').style.display = 'none';
+    $('app').hidden = false;
+    showPage(state.settings.lastPage && state.settings.lastPage !== 'page-home' ? state.settings.lastPage : 'page-home');
+  };
+
+  /* ---- 首页吃药清单（提醒） ---- */
+  var homeMedsBox = $('homeMeds');
+  if(homeMedsBox){
+    homeMedsBox.addEventListener('click', function(e){
+      var btn = e.target.closest ? e.target.closest('.hm-toggle') : null;
+      if(!btn) return;
+      toggleHomeMed(btn.dataset.med, btn.dataset.time);
+    });
+  }
+  var medBannerEl = $('medBanner');
+  if(medBannerEl){
+    medBannerEl.addEventListener('click', function(){ this.hidden = true; });
+  }
+
+  function isTimePassed(time){
+    var p = String(time).split(':');
+    if(p.length < 2) return false;
+    var h = parseInt(p[0],10), mi = parseInt(p[1],10);
+    if(isNaN(h) || isNaN(mi)) return false;
+    var now = new Date();
+    var cur = now.getHours()*60 + now.getMinutes();
+    return (h*60 + mi) <= cur;
+  }
+
+  function renderHomeMeds(){
+    var box = $('homeMeds');
+    if(!box) return;
+    var statusEl = $('hmMedStatus');
+    if(!state.meds.length){
+      box.innerHTML = '<p class="empty">还没有记录药品，点下方「我的用药」开始添加</p>';
+      if(statusEl) statusEl.textContent = '';
+      var b0 = $('medBanner'); if(b0) b0.hidden = true;
+      return;
+    }
+    var t = todayStr();
+    var log = state.medLogs[t] || {};
+    var total = 0, done = 0, due = [];
+    var html = '';
+    state.meds.forEach(function(m){
+      var slots = (m.times || []).map(function(time){
+        var st = (log[m.id] && log[m.id][time]) || '';
+        var taken = (st === 'taken');
+        if(taken) done++;
+        total++;
+        if(!taken && isTimePassed(time)) due.push(esc(m.name) + '（' + esc(time) + '）');
+        return '<div class="hm-slot">' +
+          '<span class="hm-slot-time">⏰ ' + esc(time) + '</span>' +
+          '<button type="button" class="hm-toggle ' + (taken ? 'done' : '') + '" ' +
+            'data-med="' + m.id + '" data-time="' + esc(time) + '">' +
+            (taken ? '已吃 ✓' : '未吃 · 点这吃') + '</button>' +
+        '</div>';
+      }).join('');
+      html += '<div class="hm-med"><div class="hm-med-name">' + esc(m.name) + '</div>' + slots + '</div>';
+    });
+    box.innerHTML = html;
+    if(statusEl){
+      if(done === total){
+        statusEl.textContent = '今天 ' + total + ' 次都吃啦 🎉';
+        statusEl.className = 'hm-status all-done';
+      }else{
+        statusEl.textContent = '今天还有 ' + (total - done) + ' 次没吃';
+        statusEl.className = 'hm-status pending';
+      }
+    }
+    var b = $('medBanner');
+    if(b){
+      if(due.length){
+        var shown = due.slice(0,3).join('、');
+        b.innerHTML = '⏰ <b>该吃药啦：</b>' + shown + (due.length > 3 ? (' 等共 ' + due.length + ' 种') : '') +
+          '　<span class="banner-x">知道了 ×</span>';
+        b.hidden = false;
+      }else{
+        b.hidden = true;
+      }
+    }
+  }
+
+  function toggleHomeMed(medId, time){
+    var t = todayStr();
+    state.medLogs[t] = state.medLogs[t] || {};
+    state.medLogs[t][medId] = state.medLogs[t][medId] || {};
+    var cur = state.medLogs[t][medId][time];
+    if(cur === 'taken'){ delete state.medLogs[t][medId][time]; }
+    else { state.medLogs[t][medId][time] = 'taken'; }
+    save();
+    renderHomeMeds();
+    updateHome();
+    renderMeds();
+  }
+
+  function updateHome(){
+    var t = todayStr();
+    var log = state.medLogs[t] || {};
+    var total = 0, done = 0;
+    state.meds.forEach(function(m){
+      (m.times || []).forEach(function(time){
+        total++;
+        if(log[m.id] && log[m.id][time]) done++;
+      });
+    });
+    $('hm-med').textContent = state.meds.length
+      ? (state.meds.length + ' 种药 · 今天 ' + (total - done) + ' 次待记')
+      : '记好每天的药';
+    $('hm-daily').textContent = state.daily.length ? ('已记 ' + state.daily.length + ' 条') : '血压血糖随时记';
+    $('hm-exam').textContent = state.exams.length ? ('已存 ' + state.exams.length + ' 份') : '关键数值留个底';
+    $('hm-fall').textContent = state.falls.length ? ('已记 ' + state.falls.length + ' 次') : '跌倒情况别漏记';
+    var s = state.sos || {};
+    $('hm-sos').textContent = (s.name && s.phone) ? '已填紧急联系' : '先填好保个底';
+    renderHomeMeds();
+  }
+
+  /* ============================================================
+     用药
+     ============================================================ */
+  var tempTimes = [];
+
+  function renderTimes(){
+    var box = $('timeChips');
+    box.innerHTML = '';
+    if(!tempTimes.length){
+      box.innerHTML = '<span class="hint" style="margin:0">还没加时间</span>';
+      return;
+    }
+    tempTimes.forEach(function(t, i){
+      var c = document.createElement('span');
+      c.className = 'chip';
+      c.textContent = t + ' ✕';
+      c.onclick = function(){ tempTimes.splice(i, 1); renderTimes(); };
+      box.appendChild(c);
+    });
+  }
+
+  $('toggleAddMed').onclick = function(){
+    $('medForm').hidden = !$('medForm').hidden;
+  };
+
+  $('cancelMed').onclick = function(){
+    $('medForm').hidden = true;
+    $('medForm').reset();
+    tempTimes = []; renderTimes();
+  };
+
+  function addTimeWith(v){
+    if(!v){ toast('请先选一个时间'); return; }
+    if(tempTimes.indexOf(v) > -1){ toast('这个时间已经加过了'); return; }
+    tempTimes.push(v);
+    tempTimes.sort();
+    renderTimes();
+  }
+
+  document.querySelectorAll('[data-pt]').forEach(function(b){
+    b.onclick = function(){ addTimeWith(b.dataset.pt); };
+  });
+
+  $('addTime').onclick = function(){
+    addTimeWith($('medTime').value);
+    $('medTime').value = '';
+  };
+
+  $('medForm').onsubmit = function(e){
+    e.preventDefault();
+    if(state.meds.length >= MED_LIMIT){
+      toast('免费版最多记录 ' + MED_LIMIT + ' 种药品');
+      return;
+    }
+    var name = $('medName').value.trim();
+    if(!name){ toast('请填写药品名称'); return; }
+    if(!tempTimes.length){ toast('请至少添加一个服用时间'); return; }
+    state.meds.push({
+      id: 'm' + Date.now(),
+      name: name,
+      dose: $('medDose').value.trim(),
+      times: tempTimes.slice().sort(),
+      allergy: $('medAllergy').checked
+    });
+    save();
+    $('medForm').reset();
+    $('medForm').hidden = true;
+    tempTimes = []; renderTimes();
+    renderMeds();
+    toast('已保存');
+  };
+
+  function setMedStatus(medId, time, status){
+    var t = todayStr();
+    state.medLogs[t] = state.medLogs[t] || {};
+    state.medLogs[t][medId] = state.medLogs[t][medId] || {};
+    var current = state.medLogs[t][medId][time];
+    if(current === status){
+      delete state.medLogs[t][medId][time];
+    }else{
+      state.medLogs[t][medId][time] = status;
+    }
+    save();
+    renderMeds();
+  }
+
+  function renderMeds(){
+    var wrap = $('medList');
+    wrap.innerHTML = '';
+    if(!state.meds.length){
+      wrap.innerHTML = '<p class="empty">还没有药品，点上面的「新增药品」开始记录</p>';
+      updateHome();
+      return;
+    }
+    var t = todayStr();
+    var todayLog = state.medLogs[t] || {};
+    var html = '';
+
+    state.meds.forEach(function(m){
+      var slots = m.times.map(function(time){
+        var st = (todayLog[m.id] && todayLog[m.id][time]) || '';
+        return '<div class="slot">' +
+          '<span class="slot-time">⏰ ' + esc(time) + '</span>' +
+          '<div class="slot-btns">' +
+            '<button class="btn ok' + (st === 'taken' ? ' active' : '') + '" ' +
+              'data-act="taken" data-med="' + m.id + '" data-time="' + esc(time) + '">已吃</button>' +
+            '<button class="btn ghost' + (st === 'skip' ? ' active' : '') + '" ' +
+              'data-act="skip" data-med="' + m.id + '" data-time="' + esc(time) + '">不吃</button>' +
+            '<button class="btn warn' + (st === 'miss' ? ' active' : '') + '" ' +
+              'data-act="miss" data-med="' + m.id + '" data-time="' + esc(time) + '">忘记</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      html += '<div class="card">' +
+        '<div class="med-head">' +
+          '<span class="med-name">' + esc(m.name) + '</span>' +
+          (m.allergy ? '<span class="badge">过敏</span>' : '') +
+        '</div>' +
+        '<div class="med-meta">' + esc(m.dose || '按医嘱') +
+          ' · 每天 ' + m.times.length + ' 次</div>' +
+        '<div class="med-slots">' + slots + '</div>' +
+        '<div class="med-actions">' +
+          '<button class="btn ghost" data-copy="' + m.id + '">复制时间</button>' +
+          '<button class="btn warn" data-del="' + m.id + '">删除药品</button>' +
+        '</div>' +
+      '</div>';
+    });
+    wrap.innerHTML = html;
+    updateHome();
+  }
+
+  $('medList').addEventListener('click', function(e){
+    var b = e.target.closest('button');
+    if(!b) return;
+
+    if(b.dataset.act && b.dataset.med && b.dataset.time){
+      setMedStatus(b.dataset.med, b.dataset.time, b.dataset.act);
+      var msg = { taken: '已记录：已吃', skip: '已记录：这次不吃', miss: '已记录：忘记吃' }[b.dataset.act];
+      toast(msg);
+      return;
+    }
+    if(b.dataset.copy){
+      var m = state.meds.filter(function(x){ return x.id === b.dataset.copy; })[0];
+      if(m) copyText(m.times.join(' '), '已复制 ' + m.times.join(' ') + '，请打开手机闹钟粘贴');
+      return;
+    }
+    if(b.dataset.del){
+      ask('确定删除这个药品吗？删除后无法恢复。', '删除').then(function(ok){
+        if(!ok) return;
+        state.meds = state.meds.filter(function(x){ return x.id !== b.dataset.del; });
+        save(); renderMeds(); toast('已删除');
+      });
+    }
+  });
+
+  /* ============================================================
+     日常指标
+     ============================================================ */
+  function setDailyTime(){
+    var d = new Date();
+    $('dTime').value = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+
+      'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+  setDailyTime();
+
+  $('dPeriod').onchange = function(){
+    $('dPeriodOtherWrap').style.display = this.value === '其他' ? '' : 'none';
+  };
+
+  $('dailyForm').onsubmit = function(e){
+    e.preventDefault();
+    var sys = $('dSys').value.trim(), dia = $('dDia').value.trim(),
+        glu = $('dGlu').value.trim(), hr = $('dHr').value.trim(),
+        wt = $('dWeight').value.trim();
+    if(!sys && !dia && !glu && !hr && !wt){ toast('请至少填一项'); return; }
+
+    var period = $('dPeriod').value;
+    if(period === '其他'){
+      period = $('dPeriodOther').value.trim() || '其他';
+    }
+
+    state.daily.unshift({
+      id: 'd' + Date.now(),
+      period: period,
+      time: $('dTime').value || nowStr(),
+      sys: sys, dia: dia, glu: glu, hr: hr, weight: wt
+    });
+    state.daily = state.daily.slice(0, DAILY_LIMIT);
+    save(); renderDaily();
+    e.target.reset(); setDailyTime();
+    $('dPeriodOtherWrap').style.display = 'none';
+    toast('已保存');
+  };
+
+  /* ---------- 趋势提示 ---------- */
+  function hintValue(cur, prev, threshold, digits){
+    if(cur === '' || cur == null || prev === '' || prev == null) return '';
+    var c = parseFloat(cur), p = parseFloat(prev);
+    if(isNaN(c) || isNaN(p)) return '';
+    var d = c - p;
+    if(Math.abs(d) <= threshold) return '→';
+    return (d > 0 ? '↑' : '↓') + Math.abs(d).toFixed(digits);
+  }
+
+  function findPrevBP(rec){
+    var idx = state.daily.indexOf(rec);
+    for(var i = idx + 1; i < state.daily.length; i++){
+      var r = state.daily[i];
+      if(r.period === rec.period && r.sys && r.dia) return r;
+    }
+    return null;
+  }
+
+  function findPrevMetric(rec, key){
+    var idx = state.daily.indexOf(rec);
+    for(var i = idx + 1; i < state.daily.length; i++){
+      var r = state.daily[i];
+      if(r.period === rec.period && r[key]) return r;
+    }
+    return null;
+  }
+
+  function renderDaily(){
+    var wrap = $('dailyList');
+    wrap.innerHTML = '';
+    if(!state.daily.length){
+      wrap.innerHTML = '<p class="empty">还没有日常指标记录</p>';
+      updateHome();
+      return;
+    }
+    var html = '';
+    state.daily.forEach(function(r){
+      var items = [];
+
+      if(r.sys || r.dia){
+        var bp = esc(r.sys || '-') + ' / ' + esc(r.dia || '-');
+        var pb = findPrevBP(r);
+        if(pb){
+          var ds = hintValue(r.sys, pb.sys, 3, 0);
+          var dd = hintValue(r.dia, pb.dia, 3, 0);
+          if(ds || dd){
+            bp += ' <span class="trend">（较上次 ' + (ds || '—') + ' / ' + (dd || '—') + '）</span>';
+          }
+        }
+        items.push(['血压', bp, true]);
+      }
+
+      if(r.glu){
+        var gt = esc(r.glu) + ' mmol/L';
+        var pg = findPrevMetric(r, 'glu');
+        if(pg){
+          var dg = hintValue(r.glu, pg.glu, 0.3, 1);
+          if(dg) gt += ' <span class="trend">（较上次 ' + dg + '）</span>';
+        }
+        items.push(['血糖', gt, true]);
+      }
+
+      if(r.hr){
+        var hrt = esc(r.hr) + ' 次/分';
+        var ph = findPrevMetric(r, 'hr');
+        if(ph){
+          var dh = hintValue(r.hr, ph.hr, 3, 0);
+          if(dh) hrt += ' <span class="trend">（较上次 ' + dh + '）</span>';
+        }
+        items.push(['心率', hrt, true]);
+      }
+
+      if(r.weight){
+        var wt = esc(r.weight) + ' kg';
+        var pw = findPrevMetric(r, 'weight');
+        if(pw){
+          var dw = hintValue(r.weight, pw.weight, 0.5, 1);
+          if(dw) wt += ' <span class="trend">（较上次 ' + dw + '）</span>';
+        }
+        items.push(['体重', wt, true]);
+      }
+
+      var kv = items.map(function(x){
+        return '<div class="kv"><b>' + x[0] + '</b><span>' + (x[2] ? x[1] : esc(x[1])) + '</span></div>';
+      }).join('');
+
+      html += '<div class="card">' +
+        '<div class="rec-head">' +
+          '<span class="rec-date">' + esc(String(r.time).replace('T', ' ')) + '</span>' +
+        '</div>' +
+        '<div class="kv"><b>时间点</b><span>' + esc(r.period) + '</span></div>' +
+        kv +
+        '<button class="btn warn block" data-del="' + r.id + '" style="margin-top:.6rem">删除这条记录</button>' +
+      '</div>';
+    });
+    wrap.innerHTML = html;
+    updateHome();
+  }
+
+  $('dailyList').addEventListener('click', function(e){
+    var b = e.target.closest('[data-del]');
+    if(!b) return;
+    ask('确定删除这条记录吗？', '删除').then(function(ok){
+      if(!ok) return;
+      state.daily = state.daily.filter(function(x){ return x.id !== b.dataset.del; });
+      save(); renderDaily(); toast('已删除');
+    });
+  });
+
+  /* ============================================================
+     体检档案
+     ============================================================ */
+  $('eDate').value = todayStr();
+
+  function val(id){ return $(id).value.trim(); }
+
+  $('examForm').onsubmit = function(e){
+    e.preventDefault();
+    var date = val('eDate');
+    if(!date){ toast('请填写体检日期'); return; }
+
+    var rec = {
+      id: 'e' + Date.now(),
+      date: date,
+      glu: val('eGlu'), hba1c: val('eHba1c'),
+      tc: val('eTc'), tg: val('eTg'), ldl: val('eLdl'), hdl: val('eHdl'),
+      t: val('eT'), tPart: $('eTPart').value,
+      grip: val('eGrip'), speed: val('eSpeed'),
+      carotid: val('eCarotid'), cre: val('eCre'), bun: val('eBun'), heart: val('eHeart'),
+      mmse: val('eMmse'), mmseType: $('eMmseType').value, sense: val('eSense'),
+      note: val('eNote')
+    };
+
+    var hasAny = ['glu','hba1c','tc','tg','ldl','hdl','t','grip','speed','carotid','cre','bun','heart','mmse','sense','note']
+      .some(function(k){ return rec[k]; });
+    if(!hasAny){ toast('请至少填写一项内容'); return; }
+
+    state.exams.unshift(rec);
+    save(); renderExams(); renderSOS();
+    e.target.reset();
+    $('eDate').value = todayStr();
+    toast('已保存');
+  };
+
+  function examTrend(list, rec, key, digits){
+    var cur = rec[key];
+    if(!cur) return '';
+    var idx = list.indexOf(rec);
+    for(var i = idx + 1; i < list.length; i++){
+      var prev = list[i][key];
+      if(!prev) continue;
+      var c = parseFloat(cur), p = parseFloat(prev);
+      if(isNaN(c) || isNaN(p)) return '';
+      var d = c - p;
+      var abs = Math.abs(d).toFixed(digits);
+      var arrow = Math.abs(d) < 0.05 ? '持平' : (d > 0 ? '↑' : '↓');
+      if(arrow === '持平'){
+        return ' <span class="trend">（上次 ' + esc(prev) + '，持平）</span>';
+      }
+      return ' <span class="trend">（上次 ' + esc(prev) + '，' + arrow + abs + '）</span>';
+    }
+    return '';
+  }
+
+  function renderExams(){
+    var wrap = $('examList');
+    wrap.innerHTML = '';
+    if(!state.exams.length){
+      wrap.innerHTML = '<p class="empty">还没有体检记录</p>';
+      updateHome();
+      return;
+    }
+    var html = '';
+    state.exams.forEach(function(r){
+      var rows = '';
+      function add(label, v, trendHtml){
+        if(!v) return;
+        rows += '<div class="kv"><b>' + label + '</b><span>' + esc(v) + (trendHtml || '') + '</span></div>';
+      }
+
+      add('空腹血糖', r.glu && (r.glu + ' mmol/L'), examTrend(state.exams, r, 'glu', 1));
+      add('糖化血红蛋白', r.hba1c && (r.hba1c + ' %'), examTrend(state.exams, r, 'hba1c', 1));
+      add('总胆固醇', r.tc && (r.tc + ' mmol/L'));
+      add('甘油三酯', r.tg && (r.tg + ' mmol/L'));
+      add('LDL-C', r.ldl && (r.ldl + ' mmol/L'));
+      add('HDL-C', r.hdl && (r.hdl + ' mmol/L'));
+      add('骨密度 T 值', r.t && (r.t + '（' + r.tPart + '）'), examTrend(state.exams, r, 't', 1));
+      add('握力', r.grip && (r.grip + ' kg'), examTrend(state.exams, r, 'grip', 1));
+      add('步速', r.speed && (r.speed + ' m/s'), examTrend(state.exams, r, 'speed', 1));
+      add('颈动脉超声', r.carotid);
+      add('肌酐', r.cre && (r.cre + ' μmol/L'));
+      add('尿素氮', r.bun && (r.bun + ' mmol/L'));
+      add('心电图/心脏超声', r.heart);
+      add('认知评分', r.mmse && (r.mmseType + '：' + r.mmse));
+      add('视力/听力', r.sense);
+      add('备注', r.note);
+
+      html += '<div class="card">' +
+        '<div class="rec-head">' +
+          '<span class="rec-date">📅 ' + esc(r.date) + '</span>' +
+        '</div>' +
+        (rows || '<p class="empty">这条记录没有内容</p>') +
+        '<button class="btn warn block" data-del="' + r.id + '" style="margin-top:.6rem">删除这条体检记录</button>' +
+      '</div>';
+    });
+    wrap.innerHTML = html;
+    updateHome();
+  }
+
+  $('examList').addEventListener('click', function(e){
+    var b = e.target.closest('[data-del]');
+    if(!b) return;
+    ask('确定删除这次体检记录吗？', '删除').then(function(ok){
+      if(!ok) return;
+      state.exams = state.exams.filter(function(x){ return x.id !== b.dataset.del; });
+      save(); renderExams(); renderSOS(); toast('已删除');
+    });
+  });
+
+  /* ============================================================
+     跌倒记录
+     ============================================================ */
+  $('fDate').value = todayStr();
+
+  ['fReasons', 'fResults'].forEach(function(id){
+    $(id).addEventListener('change', function(e){
+      if(e.target.type === 'checkbox'){
+        e.target.closest('label').classList.toggle('on', e.target.checked);
+      }
+    });
+  });
+
+  $('fallForm').onsubmit = function(e){
+    e.preventDefault();
+    var reasons = Array.prototype.map.call(
+      $('fReasons').querySelectorAll('input:checked'),
+      function(x){ return x.value; }
+    );
+    var results = Array.prototype.map.call(
+      $('fResults').querySelectorAll('input:checked'),
+      function(x){ return x.value; }
+    );
+    if(!reasons.length){ toast('请至少选一个可能原因（可勾「记不清」）'); return; }
+    if(!results.length){ toast('请至少选一项后果（可勾「无伤」）'); return; }
+
+    state.falls.unshift({
+      id: 'f' + Date.now(),
+      date: val('fDate') || todayStr(),
+      period: $('fPeriod').value,
+      place: $('fPlace').value,
+      action: $('fAction').value,
+      reasons: reasons,
+      results: results,
+      drug: $('fDrug').value,
+      alone: $('fAlone').value,
+      stand: $('fStand').value,
+      walker: $('fWalker').value,
+      env: $('fEnv').value,
+      note: val('fNote')
+    });
+    save(); renderFalls();
+    e.target.reset();
+    $('fDate').value = todayStr();
+    $('fReasons').querySelectorAll('label').forEach(function(l){ l.classList.remove('on'); });
+    $('fResults').querySelectorAll('label').forEach(function(l){ l.classList.remove('on'); });
+    toast('已保存');
+  };
+
+  function renderFalls(){
+    var wrap = $('fallList');
+    wrap.innerHTML = '';
+    if(!state.falls.length){
+      wrap.innerHTML = '<p class="empty">还没有跌倒记录</p>';
+      updateHome();
+      return;
+    }
+    var html = '';
+    state.falls.forEach(function(r){
+      var results = r.results || (r.result ? [r.result] : []);
+      html += '<div class="card">' +
+        '<div class="rec-head">' +
+          '<span class="rec-date">⚠️ ' + esc(r.date) + ' · ' + esc(r.period) + '</span>' +
+        '</div>' +
+        '<div class="kv"><b>地点</b><span>' + esc(r.place) + '</span></div>' +
+        '<div class="kv"><b>当时在做什么</b><span>' + esc(r.action) + '</span></div>' +
+        '<div class="kv"><b>可能原因</b><span>' + esc(r.reasons.join('、')) + '</span></div>' +
+        '<div class="kv"><b>后果</b><span>' + esc(results.join('、') || '未记录') + '</span></div>' +
+        '<div class="kv"><b>影响平衡药物</b><span>' + esc(r.drug) + '</span></div>' +
+        '<div class="kv"><b>是否独处</b><span>' + esc(r.alone) + '</span></div>' +
+        '<div class="kv"><b>能否自己站起</b><span>' + esc(r.stand) + '</span></div>' +
+        (r.walker ? '<div class="kv"><b>使用助行器</b><span>' + esc(r.walker) + '</span></div>' : '') +
+        (r.env ? '<div class="kv"><b>扶手/防滑垫</b><span>' + esc(r.env) + '</span></div>' : '') +
+        (r.note ? '<div class="kv"><b>备注</b><span>' + esc(r.note) + '</span></div>' : '') +
+        '<button class="btn warn block" data-del="' + r.id + '" style="margin-top:.6rem">删除这条跌倒记录</button>' +
+      '</div>';
+    });
+    wrap.innerHTML = html;
+    updateHome();
+  }
+
+  $('fallList').addEventListener('click', function(e){
+    var b = e.target.closest('[data-del]');
+    if(!b) return;
+    ask('确定删除这条跌倒记录吗？', '删除').then(function(ok){
+      if(!ok) return;
+      state.falls = state.falls.filter(function(x){ return x.id !== b.dataset.del; });
+      save(); renderFalls(); toast('已删除');
+    });
+  });
+
+  /* ============================================================
+     紧急信息
+     ============================================================ */
+  function loadSOSForm(){
+    var s = state.sos || {};
+    $('sName').value = s.name || '';
+    $('sPhone').value = s.phone || '';
+    $('sDoctor').value = s.doctor || '';
+    $('sDocPhone').value = s.docPhone || '';
+    $('sPhoneIntl').checked = !!s.phoneIntl;
+    $('sDocPhoneIntl').checked = !!s.docPhoneIntl;
+    $('sAllergy').value = s.allergy || '';
+    $('sChronic').value = s.chronic || '';
+    $('sFracture').value = s.fracture || '';
+    $('sOsteo').value = s.osteo || '不清楚';
+  }
+
+  function digitsOf(v){ return (v || '').replace(/[^\d]/g, ''); }
+  function normPhone(v){ return (v || '').replace(/[\s\-()]/g, ''); } // 去空格/连字符/括号，保留 +
+  function validPhone(v, intl){
+    var raw = normPhone(v);
+    if(!raw) return true;                            // 选填可留空
+    var d = digitsOf(raw);                          // 纯数字（去掉 +）
+    if(intl){
+      // 海外/国际：E.164，含国家代码 7–15 位数字，允许任意开头
+      return /^\d{7,15}$/.test(d);
+    }
+    if(!/^\d{7,15}$/.test(d)) return false;         // 位数明显不对（少于7或多于15）
+    if(d.length === 11){
+      // 合法手机：1 开头且第2位 3–9；带区号座机：0 开头
+      return (d[0] === '1' && '3456789'.indexOf(d[1]) >= 0) || d[0] === '0';
+    }
+    if(d.length === 7 || d.length === 8){
+      // 本地座机(无区号)：首位通常是 2–9；以 1 或 0 开头基本是手机号少写，硬拒
+      return d[0] !== '1' && d[0] !== '0';
+    }
+    if(d[0] === '0') return true;                   // 带区号座机(10/12–15 位)
+    return false;                                   // 其余异常位数拦下
+  }
+  // 针对不同错误给出更贴心的提示
+  function phoneErrorMsg(v, intl){
+    if(intl){
+      var d = digitsOf(v);
+      if(!/^\d{7,15}$/.test(d)) return '海外号码位数好像不对（含国家代码一般 7–15 位），请检查。';
+      return '海外号码格式好像不对，请检查（应带 + 和国家代码，如 +1 开头）。';
+    }
+    var raw = normPhone(v);
+    if(/^1\d{6,14}$/.test(raw) && raw.length !== 11){
+      return '这个号码以 1 开头只有 ' + raw.length + ' 位，很像手机号但位数少了（手机一般 11 位），请检查。';
+    }
+    return '电话位数好像不对，请检查（手机一般 11 位，座机可带区号）。';
+  }
+  $('sosForm').onsubmit = function(e){
+    e.preventDefault();
+    var phone = val('sPhone'), docPhone = val('sDocPhone');
+    var phoneIntl = $('sPhoneIntl').checked, docPhoneIntl = $('sDocPhoneIntl').checked;
+    if(phone && !validPhone(phone, phoneIntl)){
+      toast(phoneErrorMsg(phone, phoneIntl)); return;
+    }
+    if(docPhone && !validPhone(docPhone, docPhoneIntl)){
+      toast(phoneErrorMsg(docPhone, docPhoneIntl)); return;
+    }
+    state.sos = {
+      name: val('sName'), phone: normPhone(phone),
+      doctor: val('sDoctor'), docPhone: normPhone(docPhone),
+      phoneIntl: phoneIntl, docPhoneIntl: docPhoneIntl,
+      allergy: val('sAllergy'), chronic: val('sChronic'),
+      fracture: val('sFracture'), osteo: $('sOsteo').value
+    };
+    save(); hideSosEdit();
+    toast('已保存');
+  };
+
+  function showSosEdit(){
+    loadSOSForm();
+    $('sosForm').hidden = false;
+    $('sosView').hidden = true;
+    window.scrollTo(0, 0);
+  }
+  function hideSosEdit(){
+    $('sosForm').hidden = true;
+    $('sosView').hidden = false;
+    renderSOS();
+  }
+  function callSos(){
+    var p = (state.sos && state.sos.phone) || '';
+    if(p){ window.location.href = 'tel:' + p; }
+    else { toast('还没有填紧急联系人电话'); }
+  }
+  // 这三个函数由 HTML 内联 onclick 调用，必须挂到 window 才能被全局作用域找到
+  window.showSosEdit = showSosEdit;
+  window.hideSosEdit = hideSosEdit;
+  window.callSos = callSos;
+
+  function latestT(){
+    for(var i = 0; i < state.exams.length; i++){
+      if(state.exams[i].t) return state.exams[i];
+    }
+    return null;
+  }
+
+  function renderSOS(){
+    var wrap = $('sosView');
+    var s = state.sos || {};
+    var lt = latestT();
+
+    var hasContact = !!(s.name || s.phone);
+    var med = '';
+    function mrow(label, value, tel){
+      if(!value) return;
+      var v = esc(value);
+      if(tel){ v = '<a class="dial" href="tel:' + encodeURIComponent(value) + '">' + v + ' · 拨打</a>'; }
+      med += '<div class="kv"><b>' + label + '</b><span>' + v + '</span></div>';
+    }
+    mrow('主治医生/医院', s.doctor);
+    mrow('医生电话' + (s.docPhoneIntl ? '（海外）' : ''), s.docPhone, true);
+    mrow('过敏史', s.allergy);
+    mrow('基础病', s.chronic);
+    mrow('既往骨折史', s.fracture);
+    mrow('抗骨质疏松药', s.osteo);
+
+    var tBlock = '';
+    if(lt){
+      tBlock = '<div class="kv"><b>最近骨密度 T 值</b><span>' + esc(lt.t) +
+        '（' + esc(lt.tPart) + '，' + esc(lt.date) + '）</span></div>';
+    }
+
+    if(!hasContact && !med && !tBlock){
+      wrap.innerHTML = '<p class="empty">填写下面的信息后，这里会显示一键拨号和骨骼风险背景。</p>' +
+        '<button type="button" class="btn primary block" onclick="showSosEdit()">填写紧急信息</button>';
+      updateHome();
+      return;
+    }
+
+    var contactCard = hasContact
+      ? '<div class="card sos-contact">' +
+          '<div class="group-title">📞 紧急联系人</div>' +
+          (s.name ? '<div class="kv"><b>姓名</b><span>' + esc(s.name) + '</span></div>' : '') +
+          (s.phone ? '<div class="kv"><b>电话' + (s.phoneIntl ? '（海外）' : '') + '</b><span><a class="dial" href="tel:' + encodeURIComponent(s.phone) + '">' + esc(s.phone) + ' · 拨打</a></span></div>' : '') +
+          '<button type="button" class="btn primary block" style="margin-top:.6rem" onclick="callSos()">📞 一键拨打紧急联系人</button>' +
+        '</div>'
+      : '';
+
+    var medCard = med
+      ? '<div class="card"><div class="group-title">联系与病史</div>' + med + '</div>'
+      : '';
+
+    var boneCard = '<div class="card"><div class="group-title">骨骼风险背景</div>' +
+      (tBlock || '<div class="kv"><b>骨密度</b><span>未录入，可在体检档案中补充</span></div>') +
+      '</div>';
+
+    wrap.innerHTML = contactCard + boneCard + medCard +
+      '<button type="button" class="btn ghost block" style="margin-top:.6rem" onclick="showSosEdit()">✏️ 修改紧急信息</button>';
+    updateHome();
+  }
+
+  /* ============================================================
+     设置里的按钮
+     ============================================================ */
+
+  $('btnExport').onclick = function(){
+    var json = JSON.stringify(state, null, 2);
+    var filename = '健康记录备份_' + todayStr() + '.json';
+    var copied = false;
+    var downloaded = false;
+
+    try{
+      var blob = new Blob([json], {type:'application/json'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1200);
+      downloaded = true;
+    }catch(e){}
+
+    function doCopyFallback(){
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = json;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        copied = true;
+      }catch(e){}
+      finish();
+    }
+
+    function finish(){
+      var msg;
+      if(copied){
+        msg = '备份内容已复制到剪贴板，请打开微信收藏或备忘录粘贴保存。';
+        if(downloaded) msg += '\n\n同时也尝试保存为文件，可在手机「文件」里查看。';
+      }else if(downloaded){
+        msg = '备份文件已尝试保存。\n\n如未找到文件，请改用手机自带浏览器（不要用微信）打开本页再导出。';
+      }else{
+        msg = '导出失败。\n\n请改用手机自带浏览器（不要用微信）打开本页，再点导出。';
+      }
+      info(msg);
+    }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(json).then(function(){
+        copied = true;
+        finish();
+      }, function(){
+        doCopyFallback();
+      });
+    }else{
+      doCopyFallback();
+    }
+  };
+
+  $('btnImport').onclick = function(){
+    ask('导入备份会覆盖当前手机上的全部数据。\n\n建议先点「导出备份」保存一份当前数据。\n\n确定要继续吗？', '选择文件').then(function(ok){
+      if(!ok) return;
+      $('importFile').click();
+    });
+  };
+
+  $('importFile').onchange = function(e){
+    var file = e.target.files && e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      var data;
+      try{
+        data = JSON.parse(ev.target.result);
+      }catch(err){
+        toast('读取失败：文件不是有效的备份');
+        e.target.value = '';
+        return;
+      }
+      if(!data || typeof data !== 'object'){
+        toast('读取失败：文件格式不对');
+        e.target.value = '';
+        return;
+      }
+      var looksValid = data.settings || data.meds || data.daily || data.exams || data.falls;
+      if(!looksValid){
+        toast('读取失败：不是本工具导出的备份');
+        e.target.value = '';
+        return;
+      }
+
+      if(!data.version || data.version < 3){
+        data = migrateV2ToV3(data);
+      }
+      var s = normalize(data);
+      s.daily = s.daily.slice(0, DAILY_LIMIT);
+
+      state = s;
+      save();
+
+      renderMeds(); renderDaily(); renderExams(); renderFalls();
+      loadSOSForm(); renderSOS(); applySettings();
+
+      var total = s.meds.length + s.daily.length + s.exams.length + s.falls.length;
+      toast('导入成功，共恢复 ' + total + ' 条记录');
+      e.target.value = '';
+    };
+    reader.onerror = function(){
+      toast('读取文件失败');
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  };
+
+  $('btnMember').onclick = function(){
+    var html =
+      '<div class="mem-title">会员版 · 39.9 元 / 年</div>' +
+      '<span class="mem-price">包含以下服务</span>' +
+      '<ul class="mem-list">' +
+        '<li>不限药品数量</li>' +
+        '<li>指标趋势图</li>' +
+        '<li>导出 PDF 给医生</li>' +
+        '<li>体检单照片上传</li>' +
+      '</ul>' +
+      '<div class="mem-guide">' +
+        '<b>想开通或咨询会员？</b>' +
+        '<p>先关注公众号 <em>君悦助老团</em>，在公众号里回复 <em>会员</em>，我们会联系您。</p>' +
+      '</div>' +
+      '<p class="mem-privacy">咨询时请勿发送您的健康数据截图。</p>';
+    customDialog(html, [
+      { text: '关注公众号', cls: 'primary', value: 'qr' },
+      { text: '关闭', cls: 'ghost', value: 'close' }
+    ], true).then(function(v){
+      if(v === 'qr'){
+        showPage('page-set');
+        setTimeout(function(){
+          var c = $('contactCard');
+          if(c) c.scrollIntoView({behavior:'smooth', block:'center'});
+        }, 120);
+      }
+    });
+  };
+
+  $('btnPrivacy').onclick = function(){
+    info('【隐私说明】\n基础版所有数据保存在您的手机浏览器本地，不上传服务器。我们不会收集、出售您的健康信息。如清理微信缓存、更换手机，本地数据会丢失，请您重要资料及时导出备份。');
+  };
+
+  $('btnTerms').onclick = function(){
+    info('【免责声明】\n本工具仅为健康记录存档工具，不属于医疗软件，不提供诊断、用药指导、治疗建议。所有记录内容仅供您和主治医生参考，用药调整请遵从医嘱。如您有严重不适，请及时联系家属或就医。');
+  };
+
+  $('btnClear').onclick = function(){
+    ask('这一步会清除这台手机上记录的全部数据，且无法恢复。\n\n确定要继续吗？', '继续').then(function(ok){
+      if(!ok) return;
+      ask('请再次确认：真的要清除全部数据吗？\n\n建议先点「导出备份」保存一份。', '确认清除').then(function(ok2){
+        if(!ok2) return;
+        state = defaultState();
+        save();
+        renderMeds(); renderDaily(); renderExams(); renderFalls();
+        loadSOSForm(); renderSOS(); applySettings();
+        toast('已清除全部数据');
+      });
+    });
+  };
+
+  /* ============================================================
+     初始化
+     ============================================================ */
+  applySettings();
+  renderMeds();
+  renderDaily();
+  renderExams();
+  renderFalls();
+  loadSOSForm();
+  renderSOS();
+  renderTimes();
+  renderHomeMeds();
+  $('greet').textContent = greetText();
+
+  /* 拦截页面中部的横向滑动，避免手指左右划时页面被带跑/退出。
+     注意：微信最左边缘的系统级“右滑返回”网页无法禁用，请引导老人用顶部「‹ 返回首页」按钮。 */
+  var _sx = 0, _sy = 0, _st = false;
+  document.addEventListener('touchstart', function(e){
+    if(e.touches.length !== 1){ _st = false; return; }
+    _sx = e.touches[0].clientX; _sy = e.touches[0].clientY; _st = true;
+  }, {passive:true});
+  document.addEventListener('touchmove', function(e){
+    if(!_st || e.touches.length !== 1) return;
+    var dx = e.touches[0].clientX - _sx, dy = e.touches[0].clientY - _sy;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8){
+      e.preventDefault(); // 明显横向滑动则吞掉，页面只纵向滚动
+    }
+  }, {passive:false});
+
+})();
+</script>
+</body>
+</html>

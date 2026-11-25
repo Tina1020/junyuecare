@@ -1,0 +1,25 @@
+{
+  "name": "君悦安康记",
+  "short_name": "君悦安康记",
+  "description": "适老化健康记录小工具：用药提醒、日常指标、体检档案、跌倒记录、紧急信息。",
+  "start_url": "./",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF5EC",
+  "theme_color": "#E8663C",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
